@@ -4,11 +4,11 @@ import os
 import glob
 from subprocess import call
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='storage')
 
 @app.route('/')
 def main():
-    return render_template('main.html')
+    return render_template('template.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -21,10 +21,12 @@ def submit():
         os.remove(file)
     call(['ffmpeg', '-i', filename, '-vf', 'fps=3', 'darknet/Data/out%d.jpg'])
 
+    n_files = len(os.listdir('darknet/Data'))
     os.chdir("darknet")
-    call('./darknet detect cfg/yolo.cfg yolo.weights 36 0 '.split())
+    call(('./darknet detect cfg/yolo.cfg yolo.weights ' + str(n_files) + ' 0 ').split())
     os.chdir("..")
-    return 'hello'
+
+    return render_template('result.html', filename=filename)
 
 def main():
     app.run(debug=True, host="0.0.0.0", port=5000)
