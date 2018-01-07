@@ -8,7 +8,7 @@ app = Flask(__name__, static_folder='storage')
 
 @app.route('/')
 def main():
-    return render_template('main.html')
+    return render_template('template.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
