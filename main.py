@@ -15,17 +15,15 @@ def submit():
     video = request.files['video']
     filename = 'storage/{}'.format(video.filename)
     video.save(filename)
-    img_dir = os.path.splitext(filename)[0]
-    print(img_dir)
-    try:
-        os.mkdir(img_dir)
-    except OSError:
-        pass
     
     files = glob.glob('darknet/Data/*.jpg')
     for file in files:
         os.remove(file)
     call(['ffmpeg', '-i', filename, '-vf', 'fps=3', 'darknet/Data/out%d.jpg'])
+
+    os.chdir("darknet")
+    call('./darknet detect cfg/yolo.cfg yolo.weights 36 0 '.split())
+    os.chdir("..")
     return 'hello'
 
 def main():
