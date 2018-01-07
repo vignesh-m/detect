@@ -17,9 +17,9 @@ def submit():
     name = request.form['name']
     image = request.files['image']
     # path = os.path.join(os.path.abspath('storage'), 'temp')
-    fileobj = open('temp', 'wb')
-    image.save(fileobj)
-    s3.Bucket('detect-1').put_object(Key='{}.jpg'.format(name), Body=fileobj)
+    # fileobj = open('temp', 'wb')
+    # image.save(fileobj)
+    # s3.Bucket('detect-1').put_object(Key='{}.jpg'.format(name), Body=fileobj)
     return 'hello'
     # return "{}<br/>{}<br/>".format(name, image.filename)
 
