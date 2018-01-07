@@ -4,7 +4,7 @@ import os
 import glob
 from subprocess import call
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='storage')
 
 @app.route('/')
 def main():
@@ -26,7 +26,9 @@ def submit():
     for file in files:
         os.remove(file)
     call(['ffmpeg', '-i', filename, '-vf', 'fps=3', 'darknet/Data/out%d.jpg'])
-    return 'hello'
+    n_files = len(os.listdir('darknet/Data'))
+    print(n_files)
+    return render_template('result.html', filename=filename)
 
 def main():
     app.run(debug=True, host="0.0.0.0", port=5000)
