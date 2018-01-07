@@ -3,6 +3,7 @@ from flask import render_template
 import os
 import glob
 from subprocess import call
+import shutil
 
 app = Flask(__name__, static_folder='storage')
 
@@ -28,6 +29,8 @@ def submit():
     call(['ffmpeg', '-i', filename, '-vf', 'fps=3', 'darknet/Data/out%d.jpg'])
     n_files = len(os.listdir('darknet/Data'))
     print(n_files)
+    shutil.copyfile('darknet/predictions.png', 'storage/predictions.png')
+    
     return render_template('result.html', filename=filename)
 
 def main():
