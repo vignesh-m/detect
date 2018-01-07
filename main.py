@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask import render_template
 import os
+import glob
 from subprocess import call
 
 app = Flask(__name__)
@@ -20,7 +21,11 @@ def submit():
         os.mkdir(img_dir)
     except OSError:
         pass
-    call(['ffmpeg', '-i', filename, '-vf', 'fps=3', img_dir+'/out%d.jpg'])
+    
+    files = glob.glob('darknet/Data/*.jpg')
+    for file in files:
+        os.remove(file)
+    call(['ffmpeg', '-i', filename, '-vf', 'fps=3', 'darknet/Data/out%d.jpg'])
     return 'hello'
 
 def main():
